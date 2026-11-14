@@ -78,7 +78,7 @@ export async function emailLayout(company: string, heading: string, bodyHtml: st
   return `<!doctype html><html><body style="margin:0;background:#f5f7fb;font-family:Arial,Helvetica,sans-serif;color:#111827">
 <div style="max-width:680px;margin:0 auto;padding:24px 12px">
   <div style="background:#fff;border:1px solid #e5e7eb;border-bottom:0;padding:16px 24px;border-radius:8px 8px 0 0">
-    <img src="${APP_URL}/bit-storage-logo.jpeg" alt="${esc(brand)}" width="180" style="display:block;width:180px;height:auto;border:0" />
+    <img src="${APP_URL}/palletpoint-logo.jpg" alt="${esc(brand)}" width="180" style="display:block;width:180px;height:auto;border:0" />
   </div>
   <div style="background:#0b2559;color:#fff;padding:12px 24px">
     <div style="font-size:16px;font-weight:bold">${esc(heading)}</div>

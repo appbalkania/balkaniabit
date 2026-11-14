@@ -41,7 +41,7 @@ export function Shell({ nav, user, badge, children }: { nav: NavSection[]; user:
   );
   const logo = (
     <div className="rounded-md bg-white p-1.5">
-      <Image src="/bit-storage-logo.jpeg" alt="BIT Storage" width={320} height={160} priority className="h-auto w-full" />
+      <Image src="/palletpoint-logo.jpg" alt="PalletPoint Storage" width={2048} height={683} preload className="h-auto w-full" />
     </div>
   );
 
@@ -58,7 +58,7 @@ export function Shell({ nav, user, badge, children }: { nav: NavSection[]; user:
       {/* mobile top bar */}
       <details className="bg-navy no-print md:hidden">
         <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-white">
-          <span className="font-bold">BIT Storage</span>
+          <span className="font-bold">PalletPoint Storage</span>
           <span className="rounded border border-white/30 px-2 py-0.5 text-sm">Menu</span>
         </summary>
         <div className="space-y-4 px-3 pb-4">

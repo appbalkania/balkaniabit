@@ -7,7 +7,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "BIT Storage", template: "%s · BIT Storage" },
+  title: { default: "PalletPoint Storage", template: "%s · PalletPoint Storage" },
   description: "Pallet storage management, billing and customer portal",
   robots: { index: false, follow: false },
 };

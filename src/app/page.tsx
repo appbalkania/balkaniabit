@@ -6,13 +6,15 @@ import { createAdminClient } from "@/lib/supabase/server";
 import { RetractingBar } from "@/components/retracting-bar";
 import "./landing.css";
 
-import frost from "../../public/landing/frost.jpg";
-import logo from "../../public/bit-storage-logo.jpeg";
+import interior from "../../public/landing/warehouse-interior.jpg";
+import exterior from "../../public/landing/warehouse-exterior.jpg";
+import aisle from "../../public/landing/racking-aisle.jpg";
+import logo from "../../public/palletpoint-logo.jpg";
 
 export const metadata: Metadata = {
-  title: { absolute: "BIT Storage: frozen, chilled and ambient pallet storage in Dublin" },
+  title: { absolute: "PalletPoint Storage: frozen, chilled and ambient pallet storage in Dublin" },
   description:
-    "Pallet storage in frozen, chilled and ambient zones in Dublin. Part of Balkania Group, with a live client area for stock, collections and invoices.",
+    "Pallet storage in frozen, chilled and ambient zones in Dublin, with a live client area for stock, collections and invoices.",
   robots: { index: true, follow: true },
 };
 
@@ -24,12 +26,12 @@ type Company = {
   vat_number: string | null;
 };
 
-// Defaults match the row seeded by migration 0001; Admin › Settings overrides them.
+// Defaults match the company row (migration 0010); Admin › Settings overrides them.
 const FALLBACK: Company = {
-  company_name: "BIT Storage",
-  legal_name: "Balkania International Trading LTD",
+  company_name: "PalletPoint Storage",
+  legal_name: "BIT LTD",
   phone: null,
-  email: null,
+  email: "office@palletpoint.ie",
   vat_number: "IE4281815IH",
 };
 
@@ -57,14 +59,7 @@ async function isSignedIn() {
   }
 }
 
-// Samples of the client portal's own screens. Illustrative rows, not real stock.
-const STOCK = [
-  { goods: "Frozen paratha", zone: "frozen", expiry: "Mar 2027", pallets: 6, loc: "F-A-03-2" },
-  { goods: "Halloumi 250g", zone: "chilled", expiry: "Dec 2026", pallets: 3, loc: "C-B-01-1", soon: true },
-  { goods: "Basmati rice 10kg", zone: "ambient", expiry: "Aug 2027", pallets: 12, loc: "A-D-07-3" },
-  { goods: "Pizza boxes 12in", zone: "ambient", expiry: "None", pallets: 4, loc: "A-E-02-1" },
-] as const;
-
+// A sample of the client portal's collection screen. Illustrative rows, not real stock.
 const PICK = [
   { label: "PAL-0000412", goods: "Frozen paratha", expiry: "Mar 2027", loc: "F-A-03-2", on: true },
   { label: "PAL-0000413", goods: "Frozen paratha", expiry: "Mar 2027", loc: "F-A-03-2", on: true },
@@ -80,12 +75,6 @@ const RATES = [
   { name: "Handling in", basis: "Per pallet received", note: "Each pallet gets a QR label." },
   { name: "Handling out", basis: "Per pallet dispatched", note: "Storage stops when it leaves." },
   { name: "Other services", basis: "Quoted per job", note: "Re-wrapping, labelling, one-offs." },
-] as const;
-
-const TOTALS = [
-  { zone: "frozen", label: "Frozen", pallets: 6 },
-  { zone: "chilled", label: "Chilled", pallets: 3 },
-  { zone: "ambient", label: "Ambient", pallets: 16 },
 ] as const;
 
 // Lets the owner drop real (or AI-generated) pictures into the named slots without touching the layout.
@@ -105,14 +94,16 @@ export default async function Home() {
     <div className="site">
       <div className="banner">
         <div className="container">
-          <span className="banner-place">Part of Balkania Group</span>
+          <span className="banner-place">
+            {company.email ? <a href={quoteHref}>{company.email}</a> : "Pallet storage in Dublin"}
+          </span>
           <Link href={client.href}>{client.label}</Link>
         </div>
       </div>
       <RetractingBar className="bar">
         <div className="container">
-          <Link href="/" className="bar-logo" aria-label="BIT Storage home">
-            <Image src={logo} alt="BIT Storage, part of Balkania Group" preload sizes="128px" />
+          <Link href="/" className="bar-logo" aria-label="PalletPoint Storage home">
+            <Image src={logo} alt="PalletPoint Storage" preload sizes="180px" />
           </Link>
           <nav className="bar-links" aria-label="Main">
             <a href="#rates">Rates</a>
@@ -127,57 +118,15 @@ export default async function Home() {
 
       <main>
         <section className="ledge" aria-labelledby="hero-title">
-          <div className="ledge-field" data-slot="hero" data-kind="product" data-alt="A cold-store warehouse with pallet racking">
-            <div className="container">
-              <div className="app" role="figure" aria-label="Example of the client stock screen">
-                <div className="app-top">
-                  <span className="app-account">Example Foods Ltd</span>
-                  <span className="app-tabs" aria-hidden="true">
-                    <span className="is-on">Stock</span>
-                    <span>Deliveries</span>
-                    <span>Collections</span>
-                    <span>Invoices</span>
-                  </span>
-                </div>
-                <div className="app-totals">
-                  {TOTALS.map((t) => (
-                    <div key={t.zone} className="app-total" data-zone={t.zone}>
-                      <span>{t.label}</span>
-                      <strong className="num">{t.pallets}</strong>
-                      <span>pallets</span>
-                    </div>
-                  ))}
-                </div>
-                <table className="app-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Goods</th>
-                      <th scope="col">Zone</th>
-                      <th scope="col">Expiry</th>
-                      <th scope="col" className="num">
-                        Pallets
-                      </th>
-                      <th scope="col">Location</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {STOCK.map((r) => (
-                      <tr key={r.goods}>
-                        <td>{r.goods}</td>
-                        <td>
-                          <span className="zone-tag" data-zone={r.zone}>
-                            {r.zone}
-                          </span>
-                        </td>
-                        <td className={"soon" in r ? "soon" : undefined}>{r.expiry}</td>
-                        <td className="num">{r.pallets}</td>
-                        <td className="loc">{r.loc}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <div className="ledge-field" data-slot="hero" data-alt="Warehouse interior with pallet racking and loading doors">
+            <Image
+              src={interior}
+              alt="Warehouse interior with full pallet racking on the left and loading doors on the right"
+              fill
+              preload
+              sizes="100vw"
+              placeholder="blur"
+            />
           </div>
           <div className="container ledge-base">
             <h1 id="hero-title">Frozen, chilled, ambient.</h1>
@@ -221,13 +170,28 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="showcase" aria-label="Temperature zones">
-          <figure className="container">
-            <div className="showcase-frame" data-slot="zones" data-alt="Inside a cold store: frosted pallet racking">
-              <Image src={frost} alt="Frost crystals spreading over dark ice" sizes="(max-width: 1440px) 100vw, 1312px" placeholder="blur" />
+        <section className="showcase" aria-label="The warehouse">
+          <div className="container">
+            <div className="showcase-grid">
+              <div className="showcase-frame showcase-wide" data-slot="exterior" data-alt="Warehouse exterior with loading docks">
+                <Image
+                  src={exterior}
+                  alt="Warehouse exterior with dock doors, a truck and forklifts moving pallets in the yard"
+                  sizes="(max-width: 960px) 100vw, 864px"
+                  placeholder="blur"
+                />
+              </div>
+              <div className="showcase-frame showcase-tall" data-slot="aisle" data-alt="A tall pallet racking aisle">
+                <Image
+                  src={aisle}
+                  alt="A long aisle of orange pallet racking, stacked to the ceiling with wrapped pallets"
+                  sizes="(max-width: 960px) 100vw, 416px"
+                  placeholder="blur"
+                />
+              </div>
             </div>
-            <figcaption>Every location is zoned: a frozen pallet only goes into frozen racking.</figcaption>
-          </figure>
+            <p className="showcase-caption">Every location is zoned: a frozen pallet only goes into frozen racking.</p>
+          </div>
         </section>
 
         <section id="client-area" className="portal" aria-labelledby="portal-title">
@@ -301,7 +265,7 @@ export default async function Home() {
 
       <footer className="footer">
         <div className="container">
-          <p className="footer-statement">{company.company_name} is part of Balkania Group.</p>
+          <p className="footer-statement">Pallet space in Dublin, frozen to ambient.</p>
           <nav className="footer-links" aria-label="Footer">
             <a href="#rates">Rates</a>
             <a href="#client-area">Client area</a>
@@ -312,11 +276,6 @@ export default async function Home() {
             <p>
               {company.legal_name}
               {company.vat_number ? `, VAT ${company.vat_number}` : ""}
-            </p>
-            <p>
-              Photograph:{" "}
-              <a href="https://commons.wikimedia.org/wiki/File:Ice_structure_no._2.jpg">BogTar201213</a> (CC BY-SA 4.0,
-              Wikimedia Commons)
             </p>
           </div>
         </div>

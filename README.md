@@ -1,6 +1,6 @@
-# BIT Storage platform
+# PalletPoint Storage platform
 
-Pallet storage management for BIT Storage (part of Balkania Group), Ireland.
+Pallet storage management for PalletPoint Storage (BIT LTD), Ireland.
 Next.js on **Vercel**, database and logins on **Supabase**, payments on **Stripe**, accounts export to **Sage**.
 
 | Area | What it does |
@@ -22,7 +22,7 @@ Next.js on **Vercel**, database and logins on **Supabase**, payments on **Stripe
 1. Create a project at supabase.com. Choose region **eu-west-1 (Ireland)**.
 2. **SQL Editor**: run every file in `supabase/migrations/` **in order** (`0001` … `0009`).
 3. **Authentication › Providers › Email**: turn **off** "Allow new users to sign up" (logins are by invitation only).
-4. **Authentication › URL Configuration**: Site URL = your app address (e.g. `https://portal.bitstorage.ie`); add `https://portal.bitstorage.ie/**` to Redirect URLs.
+4. **Authentication › URL Configuration**: Site URL = your app address (e.g. `https://www.palletpoint.ie`); add `https://www.palletpoint.ie/**` to Redirect URLs.
 5. **Authentication › Email Templates**: change the link in two templates so invitations and password resets work with server-side login:
    - **Invite user**: `<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/account">Accept the invitation</a>`
    - **Reset password**: `<a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=recovery&next=/account">Reset password</a>`
@@ -89,7 +89,7 @@ npm run dev                   # http://localhost:3000
 npm run test:db               # runs every migration in an in-memory Postgres and tests the stock/billing/ledger/security logic
 npx tsc --noEmit && npm run lint
 ```
-`scripts/embed-logo.mjs` regenerates the logo used on invoice PDFs from `public/bit-storage-logo.jpeg`.
+`scripts/embed-logo.mjs` regenerates the logo used on invoice PDFs from `public/palletpoint-logo.jpg`.
 
 ### How storage charging works (for checking invoices)
 For each customer, temperature zone and Monday–Sunday week, a pallet counts if it was received on or before Sunday and had not been dispatched before Monday (Irish local dates). Arrival day and departure day both count.

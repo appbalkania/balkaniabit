@@ -8,7 +8,7 @@ export default function PendingPage() {
       <div className="card max-w-md p-6 text-center">
         <h1 className="text-navy text-xl font-bold">Your account is being set up</h1>
         <p className="mt-2 text-sm text-gray-600">
-          Your login works, but it has not been linked to a customer account yet. Please contact BIT Storage and we will
+          Your login works, but it has not been linked to a customer account yet. Please contact PalletPoint Storage and we will
           finish setting you up.
         </p>
         <form action={signOut} className="mt-4">
