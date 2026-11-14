@@ -1,0 +1,509 @@
+/* Hallmark · v2.0.0 · theme: custom (brand: BIT Storage logo tokens from globals.css) · genre: modern-minimal · job: hire · shape: photographic · hero: poster · nav: paper bar, logo left, three anchors and the client login right · footer: legal strip, logo over company facts · posture: restrained · signature: a client stock list with expiry and location, set beside the sign-in · surface: tinted */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R5 V4 · weakest: P, a storage page argues little; led with the live client view instead of claims nobody gave */
+
+/* ---- tokens (all colour and type on this page goes through these) ---- */
+:root {
+  --lp-navy: #0b2559;
+  --lp-navy-2: #16357a;
+  --lp-teal: #0a9a7a;
+  --lp-teal-2: #066a55;
+  --lp-teal-3: #055443;
+  --lp-ink: #0f1a2e;
+  --lp-muted: #4a566b;
+  --lp-paper: #f6f8fb;
+  --lp-card: #fdfdfe;
+  --lp-line: #dfe4ec;
+  --lp-on-dark: #f3f6fb;
+  --lp-on-dark-muted: #c6d0e2;
+  --lp-frozen: #2563eb;
+  --lp-chilled: #0891b2;
+  --lp-ambient: #b45309;
+  --lp-shade: rgb(11 37 89 / 0.88);
+  --lp-shade-0: rgb(11 37 89 / 0);
+  --lp-font: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --lp-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --lp-max: 1200px;
+  --lp-gutter: clamp(16px, 4vw, 48px);
+  --lp-gap: clamp(24px, 4vw, 56px);
+  --lp-radius: 10px;
+  --lp-radius-sm: 6px;
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+.lp {
+  background: var(--lp-paper);
+  color: var(--lp-ink);
+  font-family: var(--lp-font);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  caret-color: var(--lp-teal);
+  scrollbar-color: var(--lp-navy-2) var(--lp-paper);
+}
+.lp ::selection {
+  background: var(--lp-teal);
+  color: var(--lp-on-dark);
+}
+
+.lp-wrap {
+  max-width: var(--lp-max);
+  margin-inline: auto;
+  padding-inline: var(--lp-gutter);
+}
+
+.lp h1,
+.lp h2,
+.lp h3 {
+  font-family: var(--lp-font);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  min-width: 0;
+  text-wrap: balance;
+  margin: 0;
+}
+.lp h2 {
+  font-size: clamp(1.9rem, 3.6vw, 2.9rem);
+  color: var(--lp-navy);
+}
+.lp h3 {
+  font-size: 1.25rem;
+  color: var(--lp-navy);
+}
+.lp p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ---- controls ---- */
+.lp a:not(.lp-btn) {
+  color: inherit;
+}
+.lp a:focus-visible,
+.lp-btn:focus-visible {
+  outline: 3px solid var(--lp-teal);
+  outline-offset: 3px;
+  transition: none;
+}
+.lp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 0 1.4em;
+  border-radius: var(--lp-radius-sm);
+  font: 600 1rem/1 var(--lp-font);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+.lp-btn:active {
+  transform: translateY(1px);
+}
+.lp-btn-primary {
+  background: var(--lp-teal-2);
+  color: var(--lp-on-dark);
+  border: 1px solid var(--lp-teal-2);
+}
+.lp-btn-primary:hover {
+  background: var(--lp-teal-3);
+  border-color: var(--lp-teal-3);
+}
+.lp-btn-quiet {
+  background: transparent;
+  color: currentColor;
+  border: 1px solid currentColor;
+}
+.lp-btn-quiet:hover {
+  background: var(--lp-shade-0);
+  border-color: var(--lp-teal);
+  color: var(--lp-teal);
+}
+.lp-hero .lp-btn-quiet:hover {
+  color: var(--lp-on-dark);
+  border-color: var(--lp-on-dark);
+  background: var(--lp-navy);
+}
+
+/* ---- nav ---- */
+.lp-nav {
+  background: var(--lp-card);
+  border-bottom: 1px solid var(--lp-line);
+}
+.lp-nav .lp-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 76px;
+}
+.lp-nav-logo {
+  display: block;
+  border-radius: var(--lp-radius-sm);
+}
+.lp-nav-logo img {
+  display: block;
+  width: 132px;
+  height: auto;
+}
+.lp-nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.75rem, 2.5vw, 2rem);
+  font-size: 0.95rem;
+}
+.lp-nav-links a:not(.lp-btn) {
+  text-decoration: none;
+  color: var(--lp-muted);
+  border-radius: 2px;
+}
+.lp-nav-links a:not(.lp-btn):hover {
+  color: var(--lp-navy);
+}
+.lp-nav .lp-btn {
+  min-height: 42px;
+  background: var(--lp-navy);
+  border-color: var(--lp-navy);
+  color: var(--lp-on-dark);
+}
+.lp-nav .lp-btn:hover {
+  background: var(--lp-navy-2);
+  border-color: var(--lp-navy-2);
+}
+@media (max-width: 720px) {
+  .lp-nav-links a:not(.lp-btn) {
+    display: none;
+  }
+}
+
+/* ---- hero: the building at night, full bleed ---- */
+.lp-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: min(84dvh, 760px);
+  display: flex;
+  align-items: flex-end;
+  color: var(--lp-on-dark);
+  background: var(--lp-navy);
+}
+.lp-hero-img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  object-fit: cover;
+  object-position: 62% 50%;
+}
+.lp-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, var(--lp-shade) 0%, var(--lp-shade) 28%, var(--lp-shade-0) 72%);
+}
+.lp-hero .lp-wrap {
+  width: 100%;
+  padding-block: clamp(48px, 10vh, 112px);
+}
+.lp-hero-copy {
+  max-width: 34rem;
+}
+.lp-hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  color: var(--lp-on-dark);
+  letter-spacing: -0.03em;
+}
+.lp-hero p {
+  margin-top: 1.25rem;
+  font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+  color: var(--lp-on-dark-muted);
+  max-width: 28rem;
+}
+.lp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+@media (max-width: 720px) {
+  .lp-hero::before {
+    background: linear-gradient(0deg, var(--lp-shade) 0%, var(--lp-shade) 45%, var(--lp-shade-0) 100%);
+  }
+}
+
+/* ---- sections ---- */
+.lp-section {
+  padding-block: clamp(64px, 10vw, 128px);
+}
+.lp-intro {
+  max-width: 40rem;
+}
+.lp-intro p {
+  margin-top: 1rem;
+  color: var(--lp-muted);
+}
+
+/* zones: three rows, each with its temperature colour as a rule */
+.lp-zones {
+  margin-top: clamp(32px, 5vw, 56px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--lp-gap);
+}
+.lp-zone {
+  border-top: 4px solid var(--zone);
+  padding-top: 1.25rem;
+}
+.lp-zone h3 {
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+}
+.lp-zone p {
+  margin-top: 0.6rem;
+  color: var(--lp-muted);
+}
+.lp-zone-frozen {
+  --zone: var(--lp-frozen);
+}
+.lp-zone-chilled {
+  --zone: var(--lp-chilled);
+}
+.lp-zone-ambient {
+  --zone: var(--lp-ambient);
+}
+@media (max-width: 820px) {
+  .lp-zones {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* the racking photograph, wide */
+.lp-figure {
+  margin: 0;
+}
+.lp-figure img {
+  display: block;
+  width: 100%;
+  height: clamp(280px, 48vw, 600px);
+  object-fit: cover;
+  border-radius: var(--lp-radius);
+}
+.lp-figure figcaption {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--lp-muted);
+}
+
+/* client area: list beside the sample stock view */
+.lp-portal {
+  background: var(--lp-navy);
+  color: var(--lp-on-dark);
+}
+.lp-portal h2 {
+  color: var(--lp-on-dark);
+}
+.lp-portal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--lp-gap);
+  align-items: center;
+}
+.lp-list {
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+  color: var(--lp-on-dark-muted);
+}
+.lp-list li {
+  padding-left: 1.25rem;
+  border-left: 2px solid var(--lp-teal);
+}
+.lp-note {
+  margin-top: 1rem !important;
+  font-size: 0.95rem;
+  color: var(--lp-on-dark-muted);
+}
+.lp-portal .lp-btn-quiet {
+  color: var(--lp-on-dark);
+}
+@media (max-width: 900px) {
+  .lp-portal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.lp-stock {
+  background: var(--lp-card);
+  color: var(--lp-ink);
+  border-radius: var(--lp-radius);
+  overflow: hidden;
+}
+.lp-stock-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--lp-line);
+}
+.lp-stock-head strong {
+  color: var(--lp-navy);
+}
+.lp-stock-head span {
+  font-size: 0.85rem;
+  color: var(--lp-muted);
+}
+.lp-stock-scroll {
+  overflow-x: auto;
+}
+.lp-stock table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.lp-stock th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--lp-muted);
+  padding: 0.6rem 1rem;
+  background: var(--lp-paper);
+  white-space: nowrap;
+}
+.lp-stock td {
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--lp-line);
+  white-space: nowrap;
+}
+.lp-stock .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.lp-stock .loc {
+  font-family: var(--lp-mono);
+  font-size: 0.85rem;
+}
+.lp-stock .soon {
+  color: var(--lp-ambient);
+  font-weight: 600;
+}
+.lp-tag {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: var(--lp-ink);
+  border: 1.5px solid var(--zone);
+}
+/* phones: each stock row becomes a two-line card instead of a sideways scroll */
+@media (max-width: 600px) {
+  .lp-stock thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .lp-stock tr {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.25rem 1rem;
+    padding: 0.8rem 1rem;
+    border-top: 1px solid var(--lp-line);
+  }
+  .lp-stock td {
+    padding: 0;
+    border: 0;
+    white-space: normal;
+  }
+  .lp-stock td:first-child {
+    font-weight: 600;
+  }
+  .lp-stock .num::after {
+    content: " pallets";
+  }
+}
+
+/* contact */
+.lp-contact-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: var(--lp-gap);
+  align-items: center;
+}
+.lp-contact-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--lp-radius);
+}
+.lp-facts {
+  margin: 1.75rem 0 0;
+  display: grid;
+  gap: 1.1rem;
+}
+.lp-facts dt {
+  font-size: 0.9rem;
+  color: var(--lp-muted);
+}
+.lp-facts dd {
+  margin: 0.15rem 0 0;
+  white-space: pre-line;
+  color: var(--lp-ink);
+}
+.lp-facts a {
+  color: var(--lp-navy-2);
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+@media (max-width: 900px) {
+  .lp-contact-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* footer */
+.lp-footer {
+  border-top: 1px solid var(--lp-line);
+  background: var(--lp-card);
+  padding-block: 2.5rem;
+  font-size: 0.9rem;
+  color: var(--lp-muted);
+}
+.lp-footer .lp-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.lp-footer img {
+  display: block;
+  width: 112px;
+  height: auto;
+}
+.lp-footer p + p {
+  margin-top: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-btn {
+    transition: none;
+  }
+  .lp-btn:active {
+    transform: none;
+  }
+}

@@ -16,7 +16,7 @@ export async function signIn(formData: FormData) {
   if (error) back("/login", "error", "Email or password is incorrect");
 
   // only follow same-site paths
-  redirect(next.startsWith("/") && !next.startsWith("//") ? next : "/");
+  redirect(next.startsWith("/") && !next.startsWith("//") ? next : "/dashboard");
 }
 
 export async function signOut() {

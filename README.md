@@ -12,6 +12,7 @@ Next.js on **Vercel**, database and logins on **Supabase**, payments on **Stripe
 | **Accounts** | Double-entry ledger on **Sage nominal codes**. Expenses with receipt photos. **Profit & loss**, **balance sheet**, **VAT3 return** (T1–T4), manual journals (opening balances, wages…). |
 | **Sage** | Sage 50 (desktop): CSV for *File › Import › Audit Trail Transactions*. Sage Accounting (cloud): live connection that pushes invoices and receipts nightly. |
 | **Customer portal** | Stock by product with expiry dates and locations, pre-advise deliveries, request collections by ticking pallets, invoices with PDF and pay-by-card, payment details. |
+| **Website** | Public landing page at `/` (photos in `public/landing/`, contact details read from Admin › Settings). **Client login** goes to `/login`; after sign-in `/dashboard` sends staff to `/admin` and customers to `/portal`. |
 | **Roles** | `admin` (everything), `accounts` (money + warehouse), `warehouse` (no money), `customer` (own data only, enforced in the database). |
 
 ---
@@ -19,7 +20,7 @@ Next.js on **Vercel**, database and logins on **Supabase**, payments on **Stripe
 ## 1. Supabase
 
 1. Create a project at supabase.com. Choose region **eu-west-1 (Ireland)**.
-2. **SQL Editor**: run every file in `supabase/migrations/` **in order** (`0001` … `0008`).
+2. **SQL Editor**: run every file in `supabase/migrations/` **in order** (`0001` … `0009`).
 3. **Authentication › Providers › Email**: turn **off** "Allow new users to sign up" (logins are by invitation only).
 4. **Authentication › URL Configuration**: Site URL = your app address (e.g. `https://portal.bitstorage.ie`); add `https://portal.bitstorage.ie/**` to Redirect URLs.
 5. **Authentication › Email Templates**: change the link in two templates so invitations and password resets work with server-side login:
