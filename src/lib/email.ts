@@ -62,18 +62,33 @@ export async function sendEmail(args: SendArgs): Promise<EmailResult> {
 }
 
 /** Shared branded wrapper for every customer email. */
-export function emailLayout(company: string, heading: string, bodyHtml: string) {
+export async function emailLayout(company: string, heading: string, bodyHtml: string) {
+  let tagline = "";
+  let address = "";
+  let legal = "";
+  try {
+    const { data } = await createAdminClient().from("company_settings").select("tagline, address, legal_name").single();
+    tagline = data?.tagline ?? "";
+    address = (data?.address ?? "").replace(/\s*\n\s*/g, ", ");
+    legal = data?.legal_name && data.legal_name !== company ? data.legal_name : "";
+  } catch {
+    // footer details are cosmetic
+  }
+  const brand = [legal ? `${company} (${legal})` : company, tagline].filter(Boolean).join(" – ");
   return `<!doctype html><html><body style="margin:0;background:#f5f7fb;font-family:Arial,Helvetica,sans-serif;color:#111827">
 <div style="max-width:680px;margin:0 auto;padding:24px 12px">
-  <div style="background:#0b2559;color:#fff;padding:18px 24px;border-radius:8px 8px 0 0">
-    <div style="font-size:20px;font-weight:bold">${esc(company)}</div>
-    <div style="font-size:14px;color:#9fe3d2;margin-top:2px">${esc(heading)}</div>
+  <div style="background:#fff;border:1px solid #e5e7eb;border-bottom:0;padding:16px 24px;border-radius:8px 8px 0 0">
+    <img src="${APP_URL}/bit-storage-logo.jpeg" alt="${esc(brand)}" width="180" style="display:block;width:180px;height:auto;border:0" />
+  </div>
+  <div style="background:#0b2559;color:#fff;padding:12px 24px">
+    <div style="font-size:16px;font-weight:bold">${esc(heading)}</div>
   </div>
   <div style="background:#fff;border:1px solid #e5e7eb;border-top:0;padding:24px;border-radius:0 0 8px 8px;font-size:14px;line-height:1.5">
     ${bodyHtml}
   </div>
   <div style="font-size:12px;color:#6b7280;padding:12px 4px">
-    This is an automatic message from ${esc(company)}. View your stock, orders and invoices any time at
+    ${esc([brand, address].filter(Boolean).join(" · "))}<br />
+    This is an automatic message. View your stock, orders and invoices any time at
     <a href="${APP_URL}/portal" style="color:#0a9a7a">${APP_URL.replace(/^https?:\/\//, "")}</a>.
   </div>
 </div></body></html>`;

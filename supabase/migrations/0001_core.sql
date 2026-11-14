@@ -45,8 +45,9 @@ create table public.company_settings (
   sage_mode text not null default 'none' check (sage_mode in ('none', 'sage50_csv', 'sage_accounting'))
 );
 -- BIT Storage's own details (all editable later in Admin > Settings). Phone to be added.
-insert into public.company_settings (id, address, vat_number)
+insert into public.company_settings (id, legal_name, address, vat_number)
 values (true,
+        'Balkania International Trading LTD',
         E'Sanguine House\nHuntstown Business Park\nCappagh Road\nDublin 11\nD11 T9TF, Ireland',
         'IE4281815IH');
 

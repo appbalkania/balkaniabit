@@ -27,6 +27,7 @@ export async function saveSettings(fd: FormData) {
     .from("company_settings")
     .update({
       company_name: str(fd, "company_name"),
+      tagline: orNull(str(fd, "tagline")),
       legal_name: orNull(str(fd, "legal_name")),
       address: orNull(str(fd, "address")),
       phone: orNull(str(fd, "phone")),

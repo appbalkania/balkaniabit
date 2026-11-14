@@ -100,8 +100,13 @@ export async function renderInvoicePdf(inv: InvoiceForPdf): Promise<Buffer> {
     text(inv.company.company_name, M, y - 20, { size: 18, font: bold, color: NAVY });
   }
   let cy = y;
-  right(inv.company.legal_name || inv.company.company_name, W - M, cy, { font: bold, size: 10.5, color: NAVY });
+  // trading name in bold, then the registered company that trades under it
+  right(inv.company.company_name, W - M, cy, { font: bold, size: 10.5, color: NAVY });
   cy -= 13;
+  if (inv.company.legal_name && inv.company.legal_name !== inv.company.company_name) {
+    right(inv.company.legal_name, W - M, cy, { size: 8.5, color: GREEN });
+    cy -= 12;
+  }
   for (const l of wrap(inv.company.address ?? "", font, 8.5, 220)) {
     if (l) {
       right(l, W - M, cy, { size: 8.5, color: GREY });
@@ -230,7 +235,10 @@ export async function renderInvoicePdf(inv: InvoiceForPdf): Promise<Buffer> {
 
   // ---- footer on every page ----
   const foot = [
-    inv.company.legal_name || inv.company.company_name,
+    inv.company.legal_name && inv.company.legal_name !== inv.company.company_name
+      ? `${inv.company.company_name} is a trading name of ${inv.company.legal_name}`
+      : inv.company.company_name,
+    inv.company.tagline,
     inv.company.company_number ? `Company Reg. No. ${inv.company.company_number}` : null,
     inv.company.vat_number ? `VAT No. ${inv.company.vat_number}` : null,
   ]

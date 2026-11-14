@@ -12,7 +12,7 @@ import { CURRENCY, DIRECT_DEBIT_TYPE, esc, fmtDate } from "@/lib/format";
 /** Let the warehouse know something needs doing (to the company email in Settings). */
 async function tellWarehouse(subject: string, html: string) {
   const { data: s } = await createAdminClient().from("company_settings").select("company_name, email").single();
-  if (s?.email) await sendEmail({ kind: "goods_out", to: s.email, subject, html: emailLayout(s.company_name, subject, html) });
+  if (s?.email) await sendEmail({ kind: "goods_out", to: s.email, subject, html: await emailLayout(s.company_name, subject, html) });
 }
 
 export async function preAdviseDelivery(fd: FormData) {

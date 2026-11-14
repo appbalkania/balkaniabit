@@ -35,7 +35,10 @@ export default async function Settings({ searchParams }: { searchParams: SP }) {
             <Field label="Trading name">
               <input className="input" name="company_name" defaultValue={s.company_name} required />
             </Field>
-            <Field label="Legal name">
+            <Field label="Group line" hint="Printed under the name on invoices and emails">
+              <input className="input" name="tagline" defaultValue={s.tagline ?? ""} placeholder="Part of Balkania Group" />
+            </Field>
+            <Field label="Legal name" hint="Registered company name, if different">
               <input className="input" name="legal_name" defaultValue={s.legal_name ?? ""} />
             </Field>
             <Field label="VAT number">

@@ -117,7 +117,7 @@ export async function notifyGoodsIn(goodsInId: string, force = false): Promise<E
     kind: "goods_in",
     to: customer.email,
     subject: `Goods received – ${rows.length} pallet${rows.length === 1 ? "" : "s"} (${g.number}${g.reference ? ` / ${g.reference}` : ""})`,
-    html: emailLayout(company, "Goods received", body),
+    html: await emailLayout(company, "Goods received", body),
     customerId: customer.id,
     relatedId: g.id,
   });
@@ -187,7 +187,7 @@ export async function notifyGoodsOut(goodsOutId: string, force = false): Promise
     kind: "goods_out",
     to: customer.email,
     subject: `Goods ${verb} – ${goneRows.length} pallet${goneRows.length === 1 ? "" : "s"} (${o.number}), ${leftPallets} remaining`,
-    html: emailLayout(company, `Goods ${verb}`, body),
+    html: await emailLayout(company, `Goods ${verb}`, body),
     customerId: customer.id,
     relatedId: o.id,
   });
@@ -242,7 +242,7 @@ export async function sendExpiryAlerts(): Promise<{ customers: number; sent: num
       kind: "expiry",
       to: c.email,
       subject: `Stock expiry notice – ${pallets} pallet${pallets === 1 ? "" : "s"} expired or expiring soon`,
-      html: emailLayout(company, "Stock expiry notice", body),
+      html: await emailLayout(company, "Stock expiry notice", body),
       customerId: c.id,
     });
     if (res.ok) sent += 1;

@@ -90,7 +90,7 @@ export async function deliverInvoice(invoiceId: string): Promise<{ ok: boolean; 
     kind: "invoice",
     to: customer.email,
     subject: `Invoice ${inv.number} from ${company.company_name} – ${money(inv.total)}`,
-    html: emailLayout(company.company_name, `Invoice ${inv.number}`, body),
+    html: await emailLayout(company.company_name, `Invoice ${inv.number}`, body),
     attachments: [{ filename: `${inv.number}.pdf`, content: pdf }],
     customerId: customer.id,
     relatedId: inv.id,
