@@ -3,24 +3,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { createAdminClient } from "@/lib/supabase/server";
+import { RetractingBar } from "@/components/retracting-bar";
 import "./landing.css";
 
-import hero from "../../public/landing/balkania-hero-night.jpeg";
-import racking from "../../public/landing/balkania-hero-warehouse.jpeg";
-import fleet from "../../public/landing/balkania-hero-fleet.jpeg";
+import frost from "../../public/landing/frost.jpg";
 import logo from "../../public/bit-storage-logo.jpeg";
 
 export const metadata: Metadata = {
-  title: { absolute: "BIT Storage · Frozen, chilled and ambient pallet storage in Dublin" },
+  title: { absolute: "BIT Storage: frozen, chilled and ambient pallet storage in Dublin" },
   description:
-    "Pallet storage in frozen, chilled and ambient zones at Huntstown Business Park, Dublin 11. Part of Balkania Group, with a live client area for stock, collections and invoices.",
+    "Pallet storage in frozen, chilled and ambient zones in Dublin. Part of Balkania Group, with a live client area for stock, collections and invoices.",
   robots: { index: true, follow: true },
 };
 
 type Company = {
   company_name: string | null;
   legal_name: string | null;
-  address: string | null;
   phone: string | null;
   email: string | null;
   vat_number: string | null;
@@ -30,7 +28,6 @@ type Company = {
 const FALLBACK: Company = {
   company_name: "BIT Storage",
   legal_name: "Balkania International Trading LTD",
-  address: "Sanguine House\nHuntstown Business Park\nCappagh Road\nDublin 11\nD11 T9TF, Ireland",
   phone: null,
   email: null,
   vat_number: "IE4281815IH",
@@ -41,7 +38,7 @@ async function getCompany(): Promise<Company> {
   try {
     const { data } = await createAdminClient()
       .from("company_settings")
-      .select("company_name, legal_name, address, phone, email, vat_number")
+      .select("company_name, legal_name, phone, email, vat_number")
       .single();
     if (!data) return FALLBACK;
     const merged = { ...FALLBACK };
@@ -60,13 +57,40 @@ async function isSignedIn() {
   }
 }
 
-// An example of what a client sees in the portal. Illustrative rows, not real stock.
-const SAMPLE = [
-  { goods: "Frozen paratha", zone: "frozen", batch: "B2611", expiry: "Mar 2027", pallets: 6, loc: "F-A-03-2" },
-  { goods: "Halloumi 250g", zone: "chilled", batch: "H0914", expiry: "Dec 2026", pallets: 3, loc: "C-B-01-1", soon: true },
-  { goods: "Basmati rice 10kg", zone: "ambient", batch: "R4471", expiry: "Aug 2027", pallets: 12, loc: "A-D-07-3" },
-  { goods: "Pizza boxes 12in", zone: "ambient", batch: "P0102", expiry: "None", pallets: 4, loc: "A-E-02-1" },
+// Samples of the client portal's own screens. Illustrative rows, not real stock.
+const STOCK = [
+  { goods: "Frozen paratha", zone: "frozen", expiry: "Mar 2027", pallets: 6, loc: "F-A-03-2" },
+  { goods: "Halloumi 250g", zone: "chilled", expiry: "Dec 2026", pallets: 3, loc: "C-B-01-1", soon: true },
+  { goods: "Basmati rice 10kg", zone: "ambient", expiry: "Aug 2027", pallets: 12, loc: "A-D-07-3" },
+  { goods: "Pizza boxes 12in", zone: "ambient", expiry: "None", pallets: 4, loc: "A-E-02-1" },
 ] as const;
+
+const PICK = [
+  { label: "PAL-0000412", goods: "Frozen paratha", expiry: "Mar 2027", loc: "F-A-03-2", on: true },
+  { label: "PAL-0000413", goods: "Frozen paratha", expiry: "Mar 2027", loc: "F-A-03-2", on: true },
+  { label: "PAL-0000398", goods: "Basmati rice 10kg", expiry: "Aug 2027", loc: "A-D-07-3", on: false },
+  { label: "PAL-0000377", goods: "Pizza boxes 12in", expiry: "None", loc: "A-E-02-1", on: false },
+] as const;
+
+// The charge types the billing system invoices (migration 0006). Prices are agreed per customer.
+const RATES = [
+  { name: "Frozen storage", basis: "Per pallet, per week", note: "Frozen racking only.", zone: "frozen" },
+  { name: "Chilled storage", basis: "Per pallet, per week", note: "Picked earliest expiry first.", zone: "chilled" },
+  { name: "Ambient storage", basis: "Per pallet, per week", note: "Dry goods, drinks, packaging.", zone: "ambient" },
+  { name: "Handling in", basis: "Per pallet received", note: "Each pallet gets a QR label." },
+  { name: "Handling out", basis: "Per pallet dispatched", note: "Storage stops when it leaves." },
+  { name: "Other services", basis: "Quoted per job", note: "Re-wrapping, labelling, one-offs." },
+] as const;
+
+const TOTALS = [
+  { zone: "frozen", label: "Frozen", pallets: 6 },
+  { zone: "chilled", label: "Chilled", pallets: 3 },
+  { zone: "ambient", label: "Ambient", pallets: 16 },
+] as const;
+
+// Lets the owner drop real (or AI-generated) pictures into the named slots without touching the layout.
+const SLOT_SCRIPT = `window.hallmarkSlots = (m) => { for (const [k, v] of Object.entries(m)) { const s = document.querySelector(\`[data-slot="\${k}"]\`); if (!s) continue; const im = new Image(); im.src = typeof v === 'string' ? v : v.src; im.alt = (typeof v === 'object' && v.alt) || s.dataset.alt || ''; s.querySelectorAll(':scope > img').forEach((o) => o.remove()); s.prepend(im); } };
+document.querySelectorAll('[data-slot] img').forEach((i) => { if (i.complete && !i.naturalWidth) i.remove(); else i.addEventListener('error', () => i.remove(), { once: true }); });`;
 
 export default async function Home() {
   const [company, signedIn] = await Promise.all([getCompany(), isSignedIn()]);
@@ -78,108 +102,53 @@ export default async function Home() {
     : { href: "/login", label: "Client login" };
 
   return (
-    <div className="lp">
-      <header className="lp-nav">
-        <div className="lp-wrap">
-          <Link href="/" className="lp-nav-logo" aria-label="BIT Storage home">
-            <Image src={logo} alt="BIT Storage, part of Balkania Group" preload sizes="132px" />
+    <div className="site">
+      <div className="banner">
+        <div className="container">
+          <span className="banner-place">Part of Balkania Group</span>
+          <Link href={client.href}>{client.label}</Link>
+        </div>
+      </div>
+      <RetractingBar className="bar">
+        <div className="container">
+          <Link href="/" className="bar-logo" aria-label="BIT Storage home">
+            <Image src={logo} alt="BIT Storage, part of Balkania Group" preload sizes="128px" />
           </Link>
-          <nav className="lp-nav-links" aria-label="Main">
-            <a href="#zones">Storage</a>
+          <nav className="bar-links" aria-label="Main">
+            <a href="#rates">Rates</a>
             <a href="#client-area">Client area</a>
             <a href="#contact">Contact</a>
-            <Link href={client.href} className="lp-btn">
-              {client.label}
-            </Link>
+            <a href={quoteHref} className="btn btn-primary">
+              Request a quote
+            </a>
           </nav>
         </div>
-      </header>
+      </RetractingBar>
 
       <main>
-        <section className="lp-hero" aria-labelledby="hero-title">
-          <Image
-            src={hero}
-            alt="The Balkania building at Huntstown Business Park, lit at night"
-            className="lp-hero-img"
-            fill
-            preload
-            sizes="100vw"
-            placeholder="blur"
-          />
-          <div className="lp-wrap">
-            <div className="lp-hero-copy">
-              <h1 id="hero-title">Pallet storage, frozen to ambient.</h1>
-              <p>Racked storage in Dublin 11, with your stock online every day.</p>
-              <div className="lp-actions">
-                <a href={quoteHref} className="lp-btn lp-btn-primary">
-                  Request a quote
-                </a>
-                <Link href={client.href} className="lp-btn lp-btn-quiet">
-                  {client.label}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section id="zones" className="lp-section" aria-labelledby="zones-title">
-          <div className="lp-wrap">
-            <div className="lp-intro">
-              <h2 id="zones-title">Three temperature zones under one roof.</h2>
-              <p>
-                Every location is zoned, and putaway is checked against it: a frozen pallet can only go into frozen racking.
-                Storage is charged per pallet, per week.
-              </p>
-            </div>
-            <div className="lp-zones">
-              <div className="lp-zone lp-zone-frozen">
-                <h3>Frozen</h3>
-                <p>Frozen food and ingredients, held in frozen racking.</p>
-              </div>
-              <div className="lp-zone lp-zone-chilled">
-                <h3>Chilled</h3>
-                <p>Dairy, meat and short-life lines, picked earliest expiry first.</p>
-              </div>
-              <div className="lp-zone lp-zone-ambient">
-                <h3>Ambient</h3>
-                <p>Dry goods, drinks and packaging on standard racking.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div className="lp-wrap">
-          <figure className="lp-figure">
-            <Image src={racking} alt="Aisles of pallet racking, labelled C to J, stocked with palletised goods" sizes="(max-width: 1200px) 100vw, 1200px" placeholder="blur" />
-            <figcaption>Pallet racking at Huntstown Business Park, Dublin 11.</figcaption>
-          </figure>
-        </div>
-
-        <section id="client-area" className="lp-section lp-portal" aria-labelledby="portal-title">
-          <div className="lp-wrap lp-portal-grid">
-            <div>
-              <h2 id="portal-title">Your stock, visible every day.</h2>
-              <ul className="lp-list">
-                <li>Stock by product, with batch, expiry date and location.</li>
-                <li>Pre-advise deliveries and request collections online.</li>
-                <li>An email when goods arrive and when they leave.</li>
-                <li>Weekly invoices, paid by card or SEPA Direct Debit.</li>
-              </ul>
-              <div className="lp-actions">
-                <Link href={client.href} className="lp-btn lp-btn-quiet">
-                  {client.label}
-                </Link>
-              </div>
-              <p className="lp-note">Logins are by invitation; ask us for one.</p>
-            </div>
-
-            <div className="lp-stock" role="figure" aria-label="Example of the client stock screen">
-              <div className="lp-stock-head">
-                <strong>Stock on hand</strong>
-                <span>Example</span>
-              </div>
-              <div className="lp-stock-scroll">
-                <table>
+        <section className="ledge" aria-labelledby="hero-title">
+          <div className="ledge-field" data-slot="hero" data-kind="product" data-alt="A cold-store warehouse with pallet racking">
+            <div className="container">
+              <div className="app" role="figure" aria-label="Example of the client stock screen">
+                <div className="app-top">
+                  <span className="app-account">Example Foods Ltd</span>
+                  <span className="app-tabs" aria-hidden="true">
+                    <span className="is-on">Stock</span>
+                    <span>Deliveries</span>
+                    <span>Collections</span>
+                    <span>Invoices</span>
+                  </span>
+                </div>
+                <div className="app-totals">
+                  {TOTALS.map((t) => (
+                    <div key={t.zone} className="app-total" data-zone={t.zone}>
+                      <span>{t.label}</span>
+                      <strong className="num">{t.pallets}</strong>
+                      <span>pallets</span>
+                    </div>
+                  ))}
+                </div>
+                <table className="app-table">
                   <thead>
                     <tr>
                       <th scope="col">Goods</th>
@@ -192,11 +161,13 @@ export default async function Home() {
                     </tr>
                   </thead>
                   <tbody>
-                    {SAMPLE.map((r) => (
-                      <tr key={r.batch}>
+                    {STOCK.map((r) => (
+                      <tr key={r.goods}>
                         <td>{r.goods}</td>
                         <td>
-                          <span className={`lp-tag lp-zone-${r.zone}`}>{r.zone}</span>
+                          <span className="zone-tag" data-zone={r.zone}>
+                            {r.zone}
+                          </span>
                         </td>
                         <td className={"soon" in r ? "soon" : undefined}>{r.expiry}</td>
                         <td className="num">{r.pallets}</td>
@@ -208,59 +179,149 @@ export default async function Home() {
               </div>
             </div>
           </div>
+          <div className="container ledge-base">
+            <h1 id="hero-title">Frozen, chilled, ambient.</h1>
+            <div className="ledge-side">
+              <p className="lead">Pallet storage in Dublin, with your stock online every day.</p>
+              <div className="actions">
+                <a href={quoteHref} className="btn btn-primary">
+                  Request a quote
+                </a>
+                <Link href={client.href} className="btn btn-outline">
+                  {client.label}
+                </Link>
+              </div>
+            </div>
+          </div>
         </section>
 
-        <section id="contact" className="lp-section" aria-labelledby="contact-title">
-          <div className="lp-wrap lp-contact-grid">
-            <div>
-              <h2 id="contact-title">Talk to us about space.</h2>
-              <dl className="lp-facts">
-                <div>
-                  <dt>Address</dt>
-                  <dd>{company.address}</dd>
-                </div>
-                {company.phone && (
-                  <div>
-                    <dt>Phone</dt>
-                    <dd>
-                      <a href={`tel:${company.phone.replace(/[^\d+]/g, "")}`}>{company.phone}</a>
-                    </dd>
-                  </div>
-                )}
-                {company.email && (
-                  <div>
-                    <dt>Email</dt>
-                    <dd>
-                      <a href={quoteHref}>{company.email}</a>
-                    </dd>
-                  </div>
-                )}
-              </dl>
-              <div className="lp-actions">
-                <a href={quoteHref} className="lp-btn lp-btn-primary">
-                  Request a quote
+        <section id="rates" className="rates" aria-labelledby="rates-title">
+          <div className="container rates-grid">
+            <div className="rates-head">
+              <h2 id="rates-title">Six charges, each one named.</h2>
+              <p className="lead">Every invoice line traces back to the pallets and days behind it.</p>
+            </div>
+            <div className="rates-body">
+              <ul id="zones" className="rate-list">
+                {RATES.map((r) => (
+                  <li key={r.name} className="rate" data-zone={"zone" in r ? r.zone : undefined}>
+                    <h3>{r.name}</h3>
+                    <span className="rate-basis">{r.basis}</span>
+                    <span className="rate-note">{r.note}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="rates-foot">
+                <p>Rates are agreed per customer.</p>
+                <a href={quoteHref} className="btn btn-outline">
+                  Ask for a price
                 </a>
               </div>
             </div>
-            <Image src={fleet} alt="The Balkania warehouse with its delivery fleet lined up at the loading doors" sizes="(max-width: 900px) 100vw, 700px" placeholder="blur" />
+          </div>
+        </section>
+
+        <section className="showcase" aria-label="Temperature zones">
+          <figure className="container">
+            <div className="showcase-frame" data-slot="zones" data-alt="Inside a cold store: frosted pallet racking">
+              <Image src={frost} alt="Frost crystals spreading over dark ice" sizes="(max-width: 1440px) 100vw, 1312px" placeholder="blur" />
+            </div>
+            <figcaption>Every location is zoned: a frozen pallet only goes into frozen racking.</figcaption>
+          </figure>
+        </section>
+
+        <section id="client-area" className="portal" aria-labelledby="portal-title">
+          <div className="container portal-grid">
+            <div className="app app-pick" role="figure" aria-label="Example of the collection request screen" data-slot="portal" data-kind="product">
+              <div className="app-top">
+                <span className="app-account">Request a collection</span>
+                <span className="app-hint">Example</span>
+              </div>
+              <ul className="pick-list">
+                {PICK.map((p) => (
+                  <li key={p.label} className={p.on ? "is-on" : undefined}>
+                    <span className="pick-box" aria-hidden="true" />
+                    <span className="pick-goods">
+                      <strong>{p.goods}</strong>
+                      <span className="loc">{p.label}</span>
+                    </span>
+                    <span>{p.expiry}</span>
+                    <span className="loc">{p.loc}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="app-foot">
+                <span>2 pallets selected</span>
+                <span className="app-btn" aria-hidden="true">
+                  Request collection
+                </span>
+              </div>
+            </div>
+            <div className="portal-text">
+              <h2 id="portal-title">Your stock, every day.</h2>
+              <ul className="portal-list">
+                <li>Stock by product, with expiry and location.</li>
+                <li>Pre-advise deliveries and request collections.</li>
+                <li>An email when goods arrive and leave.</li>
+                <li>Weekly invoices, paid by card or SEPA Direct Debit.</li>
+              </ul>
+              <div className="actions">
+                <Link href={client.href} className="btn btn-on-field">
+                  {client.label}
+                </Link>
+              </div>
+              <p className="portal-note">Logins are by invitation; ask us for one.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact" className="contact" aria-labelledby="contact-title">
+          <div className="container">
+            <h2 id="contact-title" className="statement">
+              Talk to us about space.
+            </h2>
+            <div className="contact-row">
+              <a href={quoteHref} className="btn btn-primary">
+                Request a quote
+              </a>
+              {company.phone && (
+                <a className="contact-link" href={`tel:${company.phone.replace(/[^\d+]/g, "")}`}>
+                  {company.phone}
+                </a>
+              )}
+              {company.email && (
+                <a className="contact-link" href={quoteHref}>
+                  {company.email}
+                </a>
+              )}
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="lp-footer">
-        <div className="lp-wrap">
-          <Image src={logo} alt="BIT Storage" sizes="112px" />
-          <div>
+      <footer className="footer">
+        <div className="container">
+          <p className="footer-statement">{company.company_name} is part of Balkania Group.</p>
+          <nav className="footer-links" aria-label="Footer">
+            <a href="#rates">Rates</a>
+            <a href="#client-area">Client area</a>
+            <a href="#contact">Contact</a>
+            <Link href={client.href}>{client.label}</Link>
+          </nav>
+          <div className="footer-legal">
             <p>
-              {company.company_name} is part of Balkania Group. {company.legal_name}
-              {company.vat_number ? `, VAT ${company.vat_number}` : ""}.
+              {company.legal_name}
+              {company.vat_number ? `, VAT ${company.vat_number}` : ""}
             </p>
             <p>
-              <Link href={client.href}>{client.label}</Link>
+              Photograph:{" "}
+              <a href="https://commons.wikimedia.org/wiki/File:Ice_structure_no._2.jpg">BogTar201213</a> (CC BY-SA 4.0,
+              Wikimedia Commons)
             </p>
           </div>
         </div>
       </footer>
+      <script dangerouslySetInnerHTML={{ __html: SLOT_SCRIPT }} />
     </div>
   );
 }

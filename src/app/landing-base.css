@@ -1,0 +1,113 @@
+/* Hallmark base rules, scoped to the public site (.site) so the staff app keeps its own styles. */
+html,
+body {
+  overflow-x: clip;
+}
+.site,
+.site *,
+.site *::before,
+.site *::after {
+  box-sizing: border-box;
+}
+.site {
+  min-height: 100dvh;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  font-size: var(--text-md);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  caret-color: var(--color-accent);
+  scrollbar-color: var(--color-muted) var(--color-paper);
+}
+.site ::selection {
+  background: color-mix(in oklab, var(--color-accent) 22%, transparent);
+  color: var(--color-ink);
+}
+.site :focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  transition: none;
+}
+.site a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+.site h1,
+.site h2,
+.site h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--display-weight);
+  font-synthesis: none;
+  letter-spacing: var(--tracking-display);
+  line-height: 1.02;
+  overflow-wrap: break-word;
+  min-width: 0;
+  text-wrap: balance;
+  color: var(--color-ink-2);
+}
+.site h1 {
+  max-width: 20ch;
+  font-size: var(--text-display);
+}
+.site h2 {
+  max-width: 30ch;
+  font-size: var(--text-section);
+}
+.site h3 {
+  max-width: 40ch;
+  font-size: var(--text-title);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+.site .lead {
+  font-size: var(--text-lead);
+  line-height: 1.45;
+  max-width: 52ch;
+}
+.site p {
+  margin: 0;
+  text-wrap: pretty;
+}
+.site img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.site ul,
+.site ol,
+.site dl,
+.site dd,
+.site figure {
+  margin: 0;
+  padding: 0;
+}
+.site .container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.site .num {
+  font-variant-numeric: tabular-nums;
+}
+.site .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (prefers-reduced-motion: reduce) {
+  .site *,
+  .site *::before,
+  .site *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
