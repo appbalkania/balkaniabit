@@ -1,22 +1,22 @@
-/* Landing page tokens: the BIT Storage brand (navy and teal from the logo, Geist from the app) on the Hallmark scale.
+/* Landing page tokens: the PalletPoint Storage brand (navy and green sampled from the logo, Geist from the app) on the Hallmark scale.
    Every colour and face on the public site goes through these. Unique names, so the staff app is untouched. */
 :root {
-  --color-paper: oklch(97.6% 0.007 262);
-  --color-paper-2: oklch(94.2% 0.012 262);
-  --color-paper-3: oklch(90.5% 0.016 262);
-  --color-ink: oklch(21% 0.03 262);
-  --color-ink-2: oklch(28.1% 0.099 262.2);
-  --color-muted: oklch(45% 0.025 262);
-  --color-rule: oklch(87% 0.014 262);
-  --color-accent: oklch(46.8% 0.089 172.5);
-  --color-accent-hover: oklch(40% 0.08 172.5);
-  --color-accent-ink: oklch(98% 0.008 172);
-  --color-focus: oklch(55% 0.12 172);
-  --color-field: oklch(28.1% 0.099 262.2);
-  --color-field-2: oklch(33% 0.11 263);
-  --color-on-field: oklch(96.5% 0.01 262);
-  --color-on-field-muted: oklch(83% 0.035 262);
-  --color-card: oklch(99.2% 0.003 262);
+  --color-paper: oklch(97.6% 0.007 255);
+  --color-paper-2: oklch(94.2% 0.012 255);
+  --color-paper-3: oklch(90.5% 0.016 255);
+  --color-ink: oklch(21% 0.03 255);
+  --color-ink-2: oklch(29.7% 0.078 254.9);
+  --color-muted: oklch(45% 0.025 255);
+  --color-rule: oklch(87% 0.014 255);
+  --color-accent: oklch(47.2% 0.086 176.4);
+  --color-accent-hover: oklch(41.9% 0.077 175.9);
+  --color-accent-ink: oklch(98% 0.008 176);
+  --color-focus: oklch(55% 0.11 176);
+  --color-field: oklch(29.7% 0.078 254.9);
+  --color-field-2: oklch(36.9% 0.093 253.8);
+  --color-on-field: oklch(96.5% 0.01 255);
+  --color-on-field-muted: oklch(83% 0.035 255);
+  --color-card: oklch(99.2% 0.003 255);
   --color-frozen: oklch(54.6% 0.215 262.9);
   --color-chilled: oklch(60.9% 0.111 221.7);
   --color-ambient: oklch(55.5% 0.146 49);

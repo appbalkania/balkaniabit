@@ -69,7 +69,7 @@ const PALLET_COLS = "label, description, temp_zone, quantity, unit, batch_no, ex
 
 async function companyName(db: ReturnType<typeof createAdminClient>) {
   const { data } = await db.from("company_settings").select("company_name").single();
-  return data?.company_name ?? "BIT Storage";
+  return data?.company_name ?? "PalletPoint Storage";
 }
 
 /**
@@ -199,7 +199,7 @@ export async function notifyGoodsOut(goodsOutId: string, force = false): Promise
 export async function sendExpiryAlerts(): Promise<{ customers: number; sent: number }> {
   const db = createAdminClient();
   const { data: s } = await db.from("company_settings").select("company_name, expiry_alert_days").single();
-  const company = s?.company_name ?? "BIT Storage";
+  const company = s?.company_name ?? "PalletPoint Storage";
   const { data: customers } = await db
     .from("customers")
     .select("id, name, email, expiry_alert_days")

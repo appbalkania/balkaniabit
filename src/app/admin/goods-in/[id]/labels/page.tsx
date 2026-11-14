@@ -35,7 +35,7 @@ export default async function Labels({ params }: { params: Promise<{ id: string 
         {withQr.map((p, i) => (
           <div key={p.id} className="flex break-inside-avoid items-stretch gap-4 border-2 border-black bg-white p-4 print:mb-4 print:break-after-page">
             <div className="flex-1">
-              <div className="text-xs font-semibold tracking-widest uppercase">BIT Storage</div>
+              <div className="text-xs font-semibold tracking-widest uppercase">PalletPoint Storage</div>
               <div className="font-mono text-4xl leading-tight font-black">{p.label}</div>
               <div className="mt-2 text-xl font-bold">{customer.name}</div>
               <div className="text-lg">{p.description}</div>

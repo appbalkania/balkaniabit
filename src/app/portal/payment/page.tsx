@@ -44,7 +44,7 @@ export default async function PaymentDetails({ searchParams }: { searchParams: S
             <>
               <p>
                 Invoices are collected automatically from <strong>{c?.stripe_payment_method_label}</strong>
-                {c?.auto_charge ? "" : " (automatic collection is currently paused by BIT Storage)"}.
+                {c?.auto_charge ? "" : " (automatic collection is currently paused by PalletPoint Storage)"}.
               </p>
               <p className="text-gray-600">You will still receive every invoice by email before it is collected.</p>
               <div className="flex flex-wrap gap-2">

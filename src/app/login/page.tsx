@@ -11,7 +11,7 @@ export default async function LoginPage({ searchParams }: { searchParams: SP }) 
   return (
     <main className="flex min-h-screen items-center justify-center p-4">
       <div className="card w-full max-w-sm p-6">
-        <Image src="/bit-storage-logo.jpeg" alt="BIT Storage – part of Balkania Group" width={320} height={160} preload className="mx-auto mb-4 h-auto w-56" />
+        <Image src="/palletpoint-logo.jpg" alt="PalletPoint Storage" width={2048} height={683} preload className="mx-auto mb-4 h-auto w-56" />
         <Flash searchParams={searchParams} />
         <form action={signIn} className="space-y-4">
           <input type="hidden" name="next" value={next} />

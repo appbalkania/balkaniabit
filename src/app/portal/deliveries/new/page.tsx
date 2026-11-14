@@ -38,7 +38,7 @@ export default async function PreAdvise({ searchParams }: { searchParams: SP }) 
         <Card title="Goods">
           <GoodsInLineRows rows={4} />
         </Card>
-        <Submit>Send to BIT Storage</Submit>
+        <Submit>Send to PalletPoint Storage</Submit>
       </form>
     </>
   );

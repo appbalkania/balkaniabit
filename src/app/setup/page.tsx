@@ -4,7 +4,7 @@ export const metadata = { title: "Setup" };
 export default function SetupPage() {
   return (
     <main className="mx-auto max-w-2xl p-6 py-12">
-      <h1 className="text-navy text-2xl font-bold">BIT Storage – setup needed</h1>
+      <h1 className="text-navy text-2xl font-bold">PalletPoint Storage – setup needed</h1>
       <p className="mt-2 text-sm text-gray-700">
         The app is running but is not connected to a database yet. Follow <code>README.md</code> in the project folder:
       </p>

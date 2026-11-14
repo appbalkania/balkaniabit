@@ -88,7 +88,7 @@ async function handle(stripe: Stripe, db: Db, event: Stripe.Event) {
       const { data: s } = await db.from("company_settings").select("company_name, email").single();
       if (inv) {
         const c = inv.customers as unknown as { id: string; name: string; email: string | null };
-        const company = s?.company_name ?? "BIT Storage";
+        const company = s?.company_name ?? "PalletPoint Storage";
         const body = `<p>Dear ${esc(c.name)},</p><p>We were unable to collect <strong>${money(Number(inv.total) - Number(inv.amount_paid))}</strong> for invoice <strong>${esc(inv.number)}</strong>.</p><p>Reason given by the bank: ${esc(reason)}</p><p>Please pay online or update your payment details:</p><p><a href="${APP_URL}/portal/invoices/${inv.id}" style="background:#0a9a7a;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;font-weight:bold">Pay invoice</a></p>`;
         await sendEmail({ kind: "payment_failed", to: c.email, subject: `Payment failed – invoice ${inv.number}`, html: await emailLayout(company, "Payment failed", body), customerId: c.id, relatedId: inv.id });
         if (s?.email) await sendEmail({ kind: "payment_failed", to: s.email, subject: `[Staff] Payment failed – ${inv.number} (${c.name})`, html: await emailLayout(company, "Payment failed", `<p>${esc(c.name)}: ${esc(reason)}</p><p><a href="${APP_URL}/admin/invoices/${inv.id}">Open invoice</a></p>`) });
