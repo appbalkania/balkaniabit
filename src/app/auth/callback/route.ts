@@ -13,5 +13,10 @@ export async function GET(request: NextRequest) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) return NextResponse.redirect(`${origin}${next}`);
   }
-  return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent("That link has expired - please request a new one")}`);
+  // No ?code: either the link failed, or Supabase sent the session in the #fragment,
+  // which survives this redirect and is picked up by <HashSession> on the login page.
+  if (code || searchParams.get("error")) {
+    return NextResponse.redirect(`${origin}/login?error=${encodeURIComponent("That link has expired - please request a new one")}`);
+  }
+  return NextResponse.redirect(`${origin}/login`);
 }
