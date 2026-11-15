@@ -60,7 +60,7 @@ export default async function Dashboard({ searchParams }: { searchParams: SP }) 
 
       {money_?.zeroRates ? (
         <div className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          One or more storage rates are still £0.00, so that storage will not be invoiced.{" "}
+          One or more storage rates are still €0.00, so that storage will not be invoiced.{" "}
           <Link href="/admin/rates" className="font-semibold underline">
             Set your Frozen / Chilled / Ambient rates
           </Link>
