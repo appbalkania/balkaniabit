@@ -17,7 +17,12 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient();
     const { error } = await supabase.auth.verifyOtp({ type, token_hash: tokenHash });
     if (!error) {
-      const msg = type === "invite" || type === "recovery" ? "?ok=" + encodeURIComponent("Welcome - please choose a password now") : "";
+      const msg =
+        type === "invite"
+          ? "?ok=" + encodeURIComponent("Welcome - please choose a password now")
+          : type === "recovery"
+            ? "?ok=" + encodeURIComponent("Choose a new password below")
+            : "";
       return NextResponse.redirect(`${origin}${next}${msg}`);
     }
   }

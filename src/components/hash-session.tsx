@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 
 const WELCOME = "?ok=" + encodeURIComponent("Welcome - please choose a password now");
+const RESET = "?ok=" + encodeURIComponent("Choose a new password below");
 const EXPIRED = "?error=" + encodeURIComponent("That link has expired or was already used - please ask for a new one");
 
 /**
@@ -31,7 +32,9 @@ export function HashSession() {
     })
       .then((r) => {
         if (!r.ok) throw new Error();
-        window.location.replace(type === "invite" || type === "recovery" ? "/account" + WELCOME : "/dashboard");
+        window.location.replace(
+          type === "invite" ? "/account" + WELCOME : type === "recovery" ? "/account" + RESET : "/dashboard"
+        );
       })
       .catch(() => window.location.replace("/login" + EXPIRED));
   }, []);
